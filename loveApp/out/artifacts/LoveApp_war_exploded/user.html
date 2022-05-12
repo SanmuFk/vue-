@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!---->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>恋爱app</title>
+    <!--使界面能够适应手机屏幕的大小-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        html,body{
+            height: 100%;
+        }
+
+        #app{
+            min-height: 100%;
+        }
+
+        .user{
+            padding: 0.8rem 4%;
+            height: 80px;
+            background-color: rgba(255,255,255,0)
+        }
+        .user .van-col{
+            line-height: 3rem;
+            font-size: 1.6rem;
+        }
+        .user .van-col img{
+            width:78px;
+            height: 78px;
+            border-radius: 50%;
+            display: block;
+        }
+        .contentList{
+            width: 100%;
+            height: auto;
+            display: flex;
+            background-color: #f2f2f2;
+            position: relative;
+            z-index: 1;
+        }
+        .contentList p{
+            font-size: 1.2rem;
+            height: 2rem;
+            text-align: center;
+            line-height: 2rem;
+            font-weight: bold;
+        }
+        .contentList .cl_ul{
+            width: 49%;
+            background-color: #f2f2f2;
+            overflow:hidden;
+        }
+        .contentList .cl_ul li{
+            width:100%;
+            display: block;
+            height: auto;
+            margin-bottom: 0.3rem;
+            background-color: #fff;
+            border: 1px solid #f2f2f2;
+            line-height: 2.4rem;
+            border-radius: 0.6rem;
+        }
+        .contentList .cl_ul li img{
+            width: 100%;
+        }
+        .contentList .cl_ul .title {
+            text-indent: 1rem;
+            font-weight: normal;
+        }
+        .contentList .cl_ul .author {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .contentList .cl_ul .author p {
+            color: gray;
+        }
+        .contentList .cl_ul .author .author-img {
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .contentList .cl_ul .author .like {
+            padding-left: 7rem;
+            color: gray;
+        }
+
+        .login_model{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left:0;
+            top:0;
+            z-index: 99;
+        }
+        .login_model section{
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .login_model .login_form{
+            width: 90%;
+            position: absolute;
+            left:50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+            padding: 1rem;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .friend{
+            padding: 0.8rem 4%;
+            height: 70px;
+            background-color: whitesmoke;
+        }
+        .friend .van-col{
+            line-height: 3rem;
+            font-size: 1.6rem;
+        }
+        .friend .van-col img{
+            width:58px;
+            height: 58px;
+            border-radius: 50%;
+            display: block;
+        }
+    </style>
+
+</head>
+<!--style="style="background-color:rgba(255,255,255,0)""-->
+<body style="background-image: url('images/user1.jpeg')">
+<div id="app">
+    <div id="div1">
+
+        <!--顶部标签栏-->
+        <van-tabbar v-model="active" :fixed="false" :border="false" style="background-color:rgba(255,255,255,0)">
+            <van-tabbar-item icon="wap-nav" style="color:#ffffff;background-color:rgba(255,255,255,0)" @click="showPopup2"></van-tabbar-item>
+            <van-tabbar-item ></van-tabbar-item>
+            <van-tabbar-item ></van-tabbar-item>
+            <van-tabbar-item ></van-tabbar-item>
+            <van-tabbar-item ></van-tabbar-item>
+            <van-tabbar-item icon="share-o" style="color:#ffffff;" @click="showPopup"></van-tabbar-item>
+        </van-tabbar>
+
+        <van-popup v-model:show="show2" position="top" :style="{ height: '30%' }">
+            <van-grid :column-num="5" icon-size="50px" :border="false">
+                <van-grid-item icon="send-gift-o" text="我的草稿" ></van-grid-item>
+                <van-grid-item icon="records" text="创作中心" ></van-grid-item>
+                <van-grid-item icon="pending-payment" text="钱包" ></van-grid-item>
+                <van-grid-item icon="cart-o" text="购物车" @click="toCart"></van-grid-item>
+                <van-grid-item icon="orders-o" text="订单" ></van-grid-item>
+                <van-grid-item icon="coupon-o" text="卡券" ></van-grid-item>
+                <van-grid-item icon="clock-o" text="浏览记录" ></van-grid-item>
+                <van-grid-item icon="vip-card-o" text="会员" ></van-grid-item>
+                <van-grid-item icon="goods-collect-o" text="心愿单" ></van-grid-item>
+            </van-grid>
+        </van-popup>
+
+        <van-popup v-model:show="show" position="bottom" :style="{ height: '30%' }">
+            <van-row class="friend">
+                <van-col span="7" style="">
+                    <img src="images/user3.png" alt="" sizes="10px">
+                    <span style="padding-left: 1.2rem;font-size:15px">王乐</span>
+                </van-col>
+                <van-col span="7" @click="">
+                    <img src="images/user5.png" alt="" sizes="10px">
+                    <span style="padding-left: 0.5rem;font-size:15px">郑伊键</span>
+                </van-col>
+                <van-col span="7" @click="">
+                    <img src="images/user4.jpeg" alt="" sizes="10px">
+                    <span style="padding-left: 1.2rem;font-size:15px">不羁</span>
+                </van-col>
+            </van-row>
+        </van-popup>
+
+        <!---->
+        <van-row class="user" style="color: white">
+            <van-col span="7" style="padding-left: 0.5rem">
+                <img :src="pic" alt="" >
+            </van-col>
+            <van-col span="15" style="padding-top: 2rem">
+                <van-row style="font-size: 20px;font-weight: bolder" @click="changeModel">{{nickname}}</van-row>
+                <van-row style="color: gainsboro">靓号：{{num}}</van-row>
+            </van-col>
+            <van-col span="2" style="padding-top: 2rem" @click="changeModel">
+                <van-icon name="arrow" style="font-size: 20px"></van-icon>
+            </van-col>
+        </van-row>
+
+        <van-row style="font-size: 14px;padding-left: 2rem;color: white" @click="changeIntro">{{briefIntro}}</van-row>
+
+        <van-row class="" style="color: white">
+            <van-col span="4" style="padding-top: 1.5rem;padding-left: 2rem">
+                <van-row style="font-size: 15px;padding-left: 1rem">{{cares}}</van-row>
+                <van-row style="color: gainsboro">关注</van-row>
+            </van-col>
+            <van-col span="4" @click="" style="padding-top: 1.5rem;padding-left: 1.5rem">
+                <van-row style="font-size: 15px;padding-left: 1rem">{{fans}}</van-row>
+                <van-row style="color: gainsboro">粉丝</van-row>
+            </van-col>
+            <van-col span="5" style="padding-top: 1.5rem;padding-bottom: 0.5rem">
+                <van-row style="font-size: 15px;padding-left: 3rem">{{praiseCollect}}</van-row>
+                <van-row style="color: gainsboro">获赞与收藏</van-row>
+            </van-col>
+            <van-col span="11" style="padding-top: 1.5rem;padding-bottom: 0.5rem;padding-left: 2rem">
+                <van-tag round plain type="primary" size="medium" color="#ffffff" style="font-size: 18px;background-color:rgba(255,255,255,0)" @click="updateInfo">编辑资料</van-tag>
+                <van-tag round plain type="primary" size="medium" color="#ffffff" style="font-size: 20px;background-color:rgba(255,255,255,0);margin-left: 2rem"><van-icon name="setting-o" ></van-icon></van-tag>
+
+            </van-col>
+
+        </van-row>
+
+    </div>
+
+    <!--登录界面-->
+    <div class="login_model" v-if="showFlag">
+        <section @click="changeModel"></section>
+        <van-form class="login_form">
+            <van-cell-group inset>
+                <van-field v-model="username" name="用户名" label="用户名" placeholder="用户名"
+                           :rules="[{required:true,message:'请填写用户名'}]">
+                </van-field>
+                <van-field v-model="password" type="password" name="密码" label="密码" placeholder="密码"
+                           :rules="[{required:true,message:'请填写密码'}]">
+                </van-field>
+            </van-cell-group>
+            <div style="margin: 16px;">
+                <van-button round block type="primary" native-type="submit" @click="login">
+                    登录
+                </van-button>
+            </div>
+        </van-form>
+    </div>
+
+
+    <div id="div2">
+
+        <van-tabs v-model:active="active" :swipeable="true">
+            <van-tab v-for="title in titles" :title="title" >
+                <div class="contentList">
+                    <ul class="cl_ul">
+                        <li v-for="item in content[1]" @click="toContentInfo(item.cid)">
+                            <img :src=`${item.pic}`>
+                            <div class="title">{{item.ctitle}}</div>
+                            <div class="author">
+                                <div class="author-img">
+                                    <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                </div>
+                                <p>{{item.nickname}}</p>
+                                <div class="like"><van-icon name="like-o"/>{{item.clike}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="cl_ul" style="margin-left: 1%">
+                        <li v-for="item in content[0]" @click="toContentInfo(item.cid)">
+                            <img :src=`${item.pic}`>
+                            <div class="title">{{item.ctitle}}</div>
+                            <div class="author">
+                                <div class="author-img">
+                                    <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                </div>
+                                <p>{{item.nickname}}</p>
+                                <div class="like"><van-icon name="like-o" />{{item.clike}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </van-tab>
+        </van-tabs>
+
+    </div>
+    <!--底部导航栏-->
+    <van-tabbar v-model="bottom" placeholder="true" >
+        <van-tabbar-item icon="home-o" name="home" @click="goHome">主页</van-tabbar-item>
+        <van-tabbar-item icon="comment-o" @click="goMessage">消息</van-tabbar-item>
+        <van-tabber-item >
+            <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" class="van-button-add" @click="goToPut">
+                +
+            </van-button>
+        </van-tabber-item>
+        <van-tabbar-item icon="bag-o" @click="goShopping">商店</van-tabbar-item>
+        <van-tabbar-item icon="contact" name="user" @click="goUser">我</van-tabbar-item>
+    </van-tabbar>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    function group(array, subGroupLength) {
+        let index = 0;
+        let newArray = [];
+        while(index < array.length) {
+            newArray.push(array.slice(index, index += subGroupLength));
+        }
+        return newArray;
+    };
+    //基本模板
+    let app = {
+        data(){
+            return {
+              nickname:'未登录',
+              num:'123456789',
+              pic:'images/user2.png',
+              briefIntro:'在这里，填写你的简介',
+              cares:'0',
+              fans:'0',
+              praiseCollect:'0',
+              showFlag:false,
+              //active:4,
+              titles:['笔记','收藏','赞过'],
+              username:'',
+              password:'',
+              bottom: "user",
+              show:false,
+              show2:false,
+                content:[]
+            }
+        },
+        created() {
+            let nickname=localStorage.getItem("nickname");
+            this.nickname= nickname == null ? '请登录' : nickname;
+            axios.get("contentServlet",{
+                params:{
+                    op:'userinfo'
+                }
+            }).then(resp=>{
+                this.content = group(resp.data,resp.data.length/2);
+            })
+        },
+        methods:{
+            changeModel(){
+                this.showFlag=!this.showFlag;
+            },
+            login(){
+                //直接发axios请求
+                axios.get("userServlet",{
+                    params:{
+                        op:'login',
+                        username:this.username,
+                        password:this.password
+                    }
+                }).then(resp=>{
+                    if(resp.data == -1){
+                        alert('用户或者密码错误');
+                    }else{
+                        //当用户登录成功之后，存一下本地数据，这样，下次刷新页面的时候，也会有数据
+                        localStorage.setItem("nickname",resp.data);
+                        localStorage.setItem("num",resp.data);
+
+                        this.showFlag=!this.showFlag;
+                        this.nickname=resp.data;
+                        this.num=resp.data;
+                        this.pic="images/cover.jpg";
+                    }
+                });
+            },
+            showPopup(){
+                this.show=true;
+            },
+            showPopup2(){
+                this.show2=true;
+            },
+            changeIntro(){
+                location.href="briefIntro.html";
+            },
+            toCart(){
+                location.href="cart.html";
+            },
+            goMessage(){
+                location.href = "message.html";
+            },
+            goShopping(){
+                location.href ="shopping.html";
+            },
+            goUser(){
+                location.href ="user.html";
+            },
+            goHome(){
+                location.href = "index.html";
+            },
+            updateInfo(){
+                location.href = "userinfo.html"
+            },
+            toContentInfo(cid){
+                location.href = "content.html#"+ cid;
+            }
+        }
+
+    }
+    //创建vue实例
+    let vue=Vue.createApp(app);
+    //绑定vant-ui
+    vue.use(vant);
+    //挂载到节点上面
+    vue.mount("#app");
+</script>
+</body>
+</html>

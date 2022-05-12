@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+  <title>Loving</title>
+  <!->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    html{
+      font-size: 10px;
+    }
+    body{
+      font-size: 1.4rem;
+    }
+    html,body{
+      height: 100%;
+    }
+
+    .van-swipe .van-swipe-item img{
+      display: block;
+      width: 100%;
+    }
+
+    .info{
+      background: #fff;
+      text-align: center;
+      line-height: 3.5rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid #666;
+    }
+    .info div{
+      color: red;
+    }
+
+    .attr{
+      background: #fff;
+      padding: 2rem 4%;
+    }
+    .attr h4{
+      font-size: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .attr ul li{
+      background: #eee;
+      height: 4rem;
+      line-height: 4rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .attr ul li span{
+      width: 25%;
+      text-align: center;
+    }
+    .attr ul li section{
+      flex: 1;
+      padding-left: 2rem;
+    }
+
+    .box img{
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <van-swipe :autoplay="3000" lazy-render>
+    <van-swipe-item v-for="image,index in gallery" :key="index">
+      <img :src=`images/${image}` />
+    </van-swipe-item>
+  </van-swipe>
+
+  <!--商品信息-->
+  <div class="info">
+    <h3>{{good.gname}}</h3>
+    <p>{{good.brief}}</p>
+    <div>￥{{good.price}}元</div>
+  </div>
+
+  <!--商品属性-->
+  <div class="attr">
+    <h4>商品参数</h4>
+    <ul>
+      <li v-for="item,index in attr" :key="index">
+        <span>{{item.aname}}</span>
+        <section class="van-ellipsis">{{item.val}}</section>
+      </li>
+    </ul>
+  </div>
+
+  <!--商品描述-->
+  <div class="box" v-html="good.descr"></div>
+
+  <van-action-bar>
+    <van-action-bar-icon icon="revoke" text="返回" @click="toHome"></van-action-bar-icon>
+    <van-action-bar-icon icon="cart-o" text="购物车" :badge="badge" @click="toCart"></van-action-bar-icon>
+    <van-action-bar-icon icon="star" text="已收藏" ></van-action-bar-icon>
+    <van-action-bar-button type="warning" text="加入购物车" @click="addCart"></van-action-bar-button>
+    <van-action-bar-button type="danger" text="立即购买" ></van-action-bar-button>
+  </van-action-bar>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+  //基本模板
+  let app ={
+    data(){
+      return{
+        gid:0,
+        gallery:[],
+        good:{},
+        attr:[],
+        badge:0
+      }
+    },
+    created() {
+      this.gid=location.hash.replace("#","");
+      //查询数据
+      axios.get("goodsServlet",{
+        params: {
+          op:'findByGid',
+          gid:this.gid
+        }
+      }).then(resp=>{
+        if(resp.data==-1){
+          location.href="Index9.html";
+          return;
+        }
+        console.log(resp.data);
+        this.gallery=resp.data[0].gallery.split(",");
+        this.good=resp.data[0];
+        this.attr=resp.data;
+      });
+    },
+    methods:{
+      toHome(){
+        location.href="index.html";
+      },
+      toCart(){
+        location.href="cart.html";
+      },
+      addCart(){
+        let nickname=localStorage.getItem("nickname");
+        let username = sessionStorage.getItem("username");
+
+        if(nickname==null){
+          alert("请登录");
+          return;
+        }
+
+        //意味着有登录
+        axios.get("goodsServlet",{
+          params: {
+            op:'addCart',
+            gid:this.gid
+          }
+        }).then(resp=>{
+          if(resp.data>0){
+            alert("添加成功");
+            if(resp.data==2){
+              this.badge++;
+            }
+          }
+        });
+      }
+    }
+  }
+
+  //创建vue实例
+  let vue=Vue.createApp(app);
+  //绑定vant-ui
+  vue.use(vant);
+  //挂载到节点上面
+  vue.mount("#app");
+</script>
+</body>
+</html>

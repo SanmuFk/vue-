@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+  <title>恋爱app</title>
+  <!->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <style>
+    html{
+      font-size: 10px;
+    }
+    body{
+      font-size: 1.4rem;
+    }
+    html,body{
+      height: 100%;
+    }
+
+    #app{
+      min-height: 100%;
+    }
+
+    .friend{
+      padding: 0.8rem 4%;
+      height: 60px;
+      background-color: white;
+    }
+    .friend .van-col{
+      line-height: 3rem;
+      font-size: 1.5rem;
+    }
+    .friend .van-col img{
+      width:55px;
+      height: 55px;
+      border-radius: 50%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <van-nav-bar
+          title="新增关注"
+          left-arrow
+          @click-left="onClickLeft"
+  ></van-nav-bar>
+
+  <div>
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="7" @click="">
+        <van-row >郑伊键</van-row>
+        <van-row style="color: silver;font-size: 15px">开始关注你了</van-row>
+      </van-col>
+      <van-col span="12.8" @click="changeFollow" style="padding-left: 9rem;padding-top: 2rem">
+        <van-tag round plain type="primary" size="medium" :color="color" style="font-size: 15px;">{{follow}}</van-tag>
+      </van-col>
+    </van-row>
+
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="7" >
+        <van-row >王乐</van-row>
+        <van-row style="color: silver;font-size: 15px" >开始关注你了</van-row>
+      </van-col>
+      <van-col span="12.8" @click="changeFollow" style="padding-left: 9rem;padding-top: 2rem">
+        <van-tag round plain type="primary" size="medium" :color="color" style="font-size: 15px;">{{follow}}</van-tag>
+      </van-col>
+    </van-row>
+
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="7" >
+        <van-row >不羁</van-row>
+        <van-row style="color: silver;font-size: 15px">开始关注你了</van-row>
+      </van-col>
+      <van-col span="12.8" @click="changeFollow" style="padding-left: 9rem;padding-top: 2rem">
+        <van-tag round plain type="primary" size="medium" :color="color" style="font-size: 15px;">{{follow}}</van-tag>
+      </van-col>
+    </van-row>
+  </div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+
+<script>
+  //基本模板
+  let app = {
+    data(){
+      return {
+        pic:'images/cover.jpg',
+        color:'red',
+        follow:'回粉'
+      }
+    },methods:{
+       changeFollow(){
+         if(this.follow=='回粉'){
+           this.follow='互相关注';
+           this.color='gray';
+         }else{
+           this.follow='回粉';
+           this.color='red';
+         }
+       },onClickLeft(){
+        location.href="message.html";
+      }
+    }
+  }
+  //创建vue实例
+  let vue=Vue.createApp(app);
+  //绑定vant-ui
+  vue.use(vant);
+  //挂载到节点上面
+  vue.mount("#app");
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+  <title>恋爱app</title>
+  <!->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    html{
+      font-size: 10px;
+    }
+    body{
+      font-size: 1.4rem;
+    }
+    html,body{
+      height: 100%;
+    }
+
+    #app{
+      min-height: 100%;
+      background-color: #efefef;
+    }
+
+    .my-swipe img{
+      display: block;
+      width:100%;
+    }
+
+    .brandList{
+      margin-top: 2rem;
+      width:100%;
+      height: 30rem;
+      background: #fff;
+    }
+
+    .brandList .bl_title{
+      font-size: 1.2rem;
+      height: 2rem;
+      text-align: center;
+      line-height: 2rem;
+      font-weight: bold;
+    }
+
+    .brandList .bl_list{
+      width: 100%;
+      height: 26rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 1.2rem;
+    }
+
+    .brandList .bl_list .bl_box{
+      width: 48%;
+      margin: 1%;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    .brandList .bl_list .bl_box .bl_name{
+      padding-left: 1rem;
+    }
+    .brandList .bl_list .bl_box .bl_price{
+      padding-left: 1rem;
+      color: red;
+    }
+
+    .goodsList{
+      margin-top: 2rem;
+      width: 100%;
+      height: 110rem;
+      background: #fff;
+    }
+    .goodsList p{
+      font-size: 1.2rem;
+      height: 2rem;
+      text-align: center;
+      line-height: 2rem;
+      font-weight: bold;
+    }
+    .goodsList ul{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 1rem;
+      background-color: #fff;
+    }
+
+    .goodsList ul li{
+      width: 48%;
+      margin-bottom: 1rem;
+      background-color: #fff;
+      text-align: center;
+      border: 1px solid #efefef;
+    }
+
+    .goodsList ul li img{
+      width: 100%;
+    }
+    .goodsList ul li .price{
+      color: red;
+    }
+
+    .friend{
+      height: 50px;
+      background-color: white;
+    }
+    .friend .van-col{
+      line-height: 3rem;
+      font-size: 1.6rem;
+    }
+
+    .goodsList{
+      margin-top: 2rem;
+      width: 100%;
+      height: 110rem;
+      background: #fff;
+    }
+    .goodsList ul{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 1rem;
+      background-color: #fff;
+    }
+
+    .goodsList ul li{
+      width: 48%;
+      margin-bottom: 1rem;
+      background-color: #fff;
+
+      border: 1px solid #efefef;
+    }
+
+    .goodsList ul li img{
+      width: 100%;
+    }
+    .goodsList ul li .price{
+      color: black;
+
+    }
+
+
+  </style>
+
+</head>
+<body>
+<div id="app">
+
+  <van-row class="friend">
+    <van-col span="19" style="">
+      <van-search v-model="searchValue" shape="round" background="#fff" placeholder="大家都在搜”告白礼物“" ></van-search>
+    </van-col>
+    <van-col span="2" @click="" style="padding-top: 1.5rem">
+      <van-icon name="cart-o" size="25px" @click="toCart"></van-icon>
+    </van-col>
+    <van-col span="2" @click="" style="padding-top: 1.5rem;padding-left: 0.5rem">
+      <van-icon name="orders-o" size="25px"></van-icon>
+    </van-col>
+  </van-row>
+
+
+  <van-swipe class="my-swipe" :autoplay="3000" lazy-render >
+    <van-swipe-item>
+      <img src="images/shopping1.jpeg" />
+    </van-swipe-item>
+    <van-swipe-item>
+      <img src="images/shopping2.jpeg" />
+    </van-swipe-item>
+    <van-swipe-item>
+      <img src="images/shopping3.jpeg" />
+    </van-swipe-item>
+  </van-swipe>
+
+  <!--宫格-->
+  <van-grid :column-num="5" :border="false">
+    <van-grid-item icon="images/shopping4.jpg" text="每日上新" ></van-grid-item>
+    <van-grid-item icon="images/shopping5.jpg" text="福利社" ></van-grid-item>
+    <van-grid-item icon="images/shopping6.jpg" text="直播逛街" ></van-grid-item>
+    <van-grid-item icon="images/shopping7.jpg" text="设计品牌" ></van-grid-item>
+    <van-grid-item icon="images/shopping8.jpg" text="潮流品牌" ></van-grid-item>
+    <van-grid-item icon="images/shopping9.jpg" text="艺术潮玩" ></van-grid-item>
+    <van-grid-item icon="images/shopping10.jpg" text="买手店" ></van-grid-item>
+    <van-grid-item icon="images/shopping11.jpg" text="三餐四季" ></van-grid-item>
+    <van-grid-item icon="images/shopping12.jpg" text="美妆护肤" ></van-grid-item>
+    <van-grid-item icon="images/shopping13.jpg" text="潮流彩妆" ></van-grid-item>
+  </van-grid>
+
+  <!--商品-->
+  <div class="goodsList">
+    <div>
+      <ul>
+        <li v-for="good in goods" :key="good.gid" @click="toInfo(good.gid)">
+          <img :src=`images/${good.pic}` alt="" style="display: block" />
+          <div class="van-ellipsis" style="padding-bottom: 2rem;">{{good.gname}}</div>
+          <div class="price" style="padding-bottom: 1rem;">￥{{good.price}}元</div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!--底部导航栏-->
+  <van-tabbar v-model="bottom" placeholder="true" >
+    <van-tabbar-item icon="home-o" name="home" @click="goHome">主页</van-tabbar-item>
+    <van-tabbar-item icon="comment-o" @click="goMessage">消息</van-tabbar-item>
+    <van-tabber-item >
+      <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" class="van-button-add" @click="goToPut">
+        +
+      </van-button>
+    </van-tabber-item>
+    <van-tabbar-item icon="bag-o" name="shop" @click="goShopping">商店</van-tabbar-item>
+    <van-tabbar-item icon="contact" @click="goUser">我</van-tabbar-item>
+  </van-tabbar>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+  //基本模板
+  let app ={
+    data(){
+      return{
+        searchValue:'',
+        active:0,
+        goods:[],
+        bottom:"shop"
+      }
+    },
+    methods:{
+      toInfo(gid){
+        location.href="goodsInfo.html#"+gid;
+      },
+      toCart(){
+        location.href="cart.html";
+      },
+      goMessage(){
+        location.href = "message.html";
+      },
+      goShopping(){
+        location.href ="shopping.html";
+      },
+      goUser(){
+        location.href ="user.html";
+      },
+      goHome(){
+        location.href = "index.html";
+      }
+    },
+    created(){
+      //当页面一加载，我们就读取数据，显示到页面上面
+      axios.get("goodsServlet",{
+        params:{
+          op:'findAllGoods'
+        }
+      }).then(resp=>{
+        console.log(resp);
+        this.goods=resp.data;
+      });
+    }
+  }
+
+  //创建vue实例
+  let vue=Vue.createApp(app);
+  //绑定vantui
+  vue.use(vant);
+  //挂载到节点上面
+  vue.mount("#app");
+</script>
+</body>
+</html>

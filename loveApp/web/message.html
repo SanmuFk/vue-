@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+  <title>恋爱app</title>
+  <!->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <style>
+    html{
+      font-size: 10px;
+    }
+    body{
+      font-size: 1.4rem;
+    }
+    html,body{
+      height: 100%;
+    }
+
+    #app{
+      min-height: 100%;
+    }
+
+    .friend{
+      padding: 0.8rem 4%;
+      height: 70px;
+      background-color: whitesmoke;
+    }
+    .friend .van-col{
+      line-height: 3rem;
+      font-size: 1.6rem;
+    }
+    .friend .van-col img{
+      width:58px;
+      height: 58px;
+      border-radius: 50%;
+      display: block;
+    }
+  </style>
+
+</head>
+<body>
+<div id="app">
+
+  <!--left-arrow-->
+  <van-nav-bar
+        title="消息"
+        right-text="创建聊天"
+        @click-right="onClickRight"
+
+  ></van-nav-bar>
+
+  <van-grid :column-num="3" icon-size="50px" :border="false">
+    <van-grid-item icon="images/message1.jpg" text="赞和收藏" url="message2.html"></van-grid-item>
+    <van-grid-item icon="images/message2.jpg" text="新增关注" url="message3.html"></van-grid-item>
+    <van-grid-item icon="images/message3.jpg" text="评论和@" ></van-grid-item>
+  </van-grid>
+  <div style="height: 10px"></div>
+
+  <div>
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="17" @click="">
+        <van-row >郑伊键</van-row>
+        <van-row style="color: silver">聊天内容</van-row>
+      </van-col>
+    </van-row>
+
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="17" @click="">
+        <van-row >王乐</van-row>
+        <van-row style="color: silver">聊天内容</van-row>
+      </van-col>
+    </van-row>
+
+    <van-row class="friend">
+      <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+        <img :src="pic" alt="" sizes="10px">
+      </van-col>
+      <van-col span="17" @click="">
+        <van-row >不羁</van-row>
+        <van-row style="color: silver">聊天内容</van-row>
+      </van-col>
+    </van-row>
+  </div>
+
+  <!--底部导航栏-->
+  <van-tabbar v-model="bottom" placeholder="true" >
+    <van-tabbar-item icon="home-o" name="home" @click="goHome">主页</van-tabbar-item>
+    <van-tabbar-item icon="comment-o" name="message" @click="goMessage">消息</van-tabbar-item>
+    <van-tabber-item >
+      <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" class="van-button-add" @click="goToPut">
+        +
+      </van-button>
+    </van-tabber-item>
+    <van-tabbar-item icon="bag-o" @click="goShopping">商店</van-tabbar-item>
+    <van-tabbar-item icon="contact" @click="goUser">我</van-tabbar-item>
+  </van-tabbar>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script>
+  //基本模板
+  let app = {
+    data(){
+      return {
+        pic:'images/cover.jpg',
+        bottom:"message"
+      }
+    },
+    methods:{
+      toHome(){
+        location.href="index.html";
+      },
+      goMessage(){
+        location.href = "message.html";
+      },
+      goShopping(){
+        location.href ="shopping.html";
+      },
+      goUser(){
+        location.href ="user.html";
+      },
+      goHome(){
+        location.href = "index.html";
+      }
+    }
+  }
+  //创建vue实例
+  let vue=Vue.createApp(app);
+  //绑定vant-ui
+  vue.use(vant);
+  //挂载到节点上面
+  vue.mount("#app");
+</script>
+</body>
+</html>

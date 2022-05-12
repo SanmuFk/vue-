@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>Loving</title>
+    <!->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        html,body{
+            height: 100%;
+        }
+
+        #app{
+            min-height: 100%;
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body>
+<div id="app" >
+    <van-nav-bar
+            title="编辑简介"
+            right-text="保存"
+            left-arrow
+            @click-left="onClickLeft"
+
+    ></van-nav-bar>
+    <p></p>
+    <van-cell-group inset >
+        <van-field
+                v-model="message"
+                rows="2"
+                autosize
+                type="textarea"
+                maxlength="100"
+                placeholder="有趣的简介可以吸引粉丝"
+                show-word-limit
+                size="large"
+        />
+    </van-cell-group>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script>
+    //基本模板
+    let app = {
+        data(){
+            return {
+                pic:'images/cover.jpg'
+            }
+        },
+        methods:{
+            onClickLeft(){
+                location.href="user.html";
+            }
+        }
+    }
+    //创建vue实例
+    let vue=Vue.createApp(app);
+    //绑定vant-ui
+    vue.use(vant);
+    //挂载到节点上面
+    vue.mount("#app");
+</script>
+</body>
+</html>

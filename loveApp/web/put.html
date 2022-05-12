@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布文章</title>
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>恋爱app</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+</head>
+<body>
+    <div id="app">
+
+        <van-tabs v-model:active="active">
+            <van-tab title="发布文章">
+                <van-form >
+                    <van-cell-group inset>
+                        <van-field name="uploader" label="图片上传">
+                            <template #input>
+                                <van-uploader v-model="img" :max-count="1"/>
+                            </template>
+                        </van-field>
+                        <van-field
+                                v-model="tname"
+                                is-link
+                                readonly
+                                name="类别"
+                                label="选择器"
+                                placeholder="点击选择类别"
+                                @click="showPicker = true"
+                        ></van-field>
+                        <van-popup v-model:show="showPicker" position="bottom">
+                            <van-picker
+                                    :columns="titles"
+                                    value-key="tname"
+                                    @confirm="onConfirm"
+                                    @cancel="showPicker = false"
+                            ></van-picker>
+                        </van-popup>
+                        <van-field
+                                v-model="ctitle"
+                                name="标题"
+                                label="标题"
+                                placeholder="标题"
+                                :rules="[{ required: true, message: '请填写标题' }]"
+                        ></van-field>
+                        <van-field
+                                v-model="content"
+                                name="内容"
+                                label="内容"
+                                placeholder="内容"
+                                :rules="[{ required: true, message: '请填写内容' }]"
+                        ></van-field>
+                    </van-cell-group>
+                    <div style="margin: 16px;">
+                        <van-button round block type="primary" @click="put">
+                            提交
+                        </van-button>
+                    </div>
+                </van-form>
+            </van-tab>
+            <van-tab title="发布视频">
+                <van-form @submit="onSubmit">
+                <van-cell-group inset>
+                    <van-field name="uploader" label="图片上传">
+                        <template #input>
+                            <van-uploader v-model="value" />
+                        </template>
+                    </van-field>
+                    <van-field
+                            v-model="vtitle"
+                            name="标题"
+                            label="标题"
+                            placeholder="标题"
+                            :rules="[{ required: true, message: '请填写标题' }]"
+                    ></van-field>
+                    <van-field
+                            v-model="vcontent"
+                            name="内容"
+                            label="内容"
+                            placeholder="内容"
+                            :rules="[{ required: true, message: '请填写内容' }]"
+                    ></van-field>
+                    <van-field
+                            v-model="vhttp"
+                            name="视频链接"
+                            label="视频链接"
+                            placeholder="视频链接"
+                            :rules="[{ required: true, message: '请填写视频链接' }]"
+                    ></van-field>
+                </van-cell-group>
+                <div style="margin: 16px;">
+                    <van-button round block type="primary" @click="put">
+                        提交
+                    </van-button>
+                </div>
+            </van-form></van-tab>
+        </van-tabs>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+        let app ={
+            data(){
+                return{
+                    user :[],
+                    content:'',
+                    ctitle:'',
+                    img:[],
+                    id:0,
+                    tid: '',
+                    tname:'',
+                    showPicker:false,
+                    titles:[]
+                }
+            },
+            created(){
+                localStorage.setItem("id","1");
+                this.id=localStorage.getItem("id");
+                axios.get("contentServlet",{
+                    params:{
+                        op:'findAllType'
+                    }
+                }).then(resp=>{
+                    this.titles = resp.data;
+                    console.log(this.titles);
+                });
+            },
+            methods:{
+                put(){
+                    axios.get("contentServlet",{
+                        params:{
+                            op:'put',
+                            id: this.id,
+                            ctitle:this.ctitle,
+                            content:this.content,
+                            pic: "images/brand5.jpg",
+                            clike:0,
+                            tid: this.tid
+                        }
+                    }).then(resp=>{
+                        if(resp !==-1){
+                            window.alert("发布成功");
+                            location.href = "index.html";
+                        } else{
+                            window.alert("发布失败");
+                        }
+                    })
+                },
+                onClickLeft(){
+                    history.back();
+                },
+                onConfirm(value){
+                    this.tid = value.tid;
+                    this.tname = value.tname;
+                    this.showPicker = false;
+                }
+            }
+        }
+        let vue = Vue.createApp(app);
+        vue.use(vant);
+        vue.mount('#app');
+    </script>
+</body>
+</html>

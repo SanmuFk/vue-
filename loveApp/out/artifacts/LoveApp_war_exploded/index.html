@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>恋爱app</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        .van-button-add{
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+        }
+        .van-field__control {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+            padding: 0;
+            margin-left: 15px;
+            line-height: inherit;
+            text-align: left;
+            background-color: transparent;
+            border: 0;
+            resize: none;
+            -webkit-user-select: auto;
+            user-select: auto;
+        }
+        .van-search__field .van-field__left-icon {
+            color: #000;
+        }
+        .search {
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        .contentList{
+            width: 100%;
+            height: auto;
+            display: flex;
+            background-color: #f2f2f2;
+            position: relative;
+            z-index: 1;
+        }
+        .contentList p{
+            font-size: 1.2rem;
+            height: 2rem;
+            text-align: center;
+            line-height: 2rem;
+            font-weight: bold;
+        }
+        .contentList .cl_ul{
+            width: 49%;
+            background-color: #f2f2f2;
+            overflow:hidden;
+        }
+        .contentList .cl_ul li{
+            width:100%;
+            display: block;
+            height: auto;
+            margin-bottom: 0.3rem;
+            background-color: #fff;
+            border: 1px solid #f2f2f2;
+            line-height: 2.4rem;
+            border-radius: 0.6rem;
+        }
+        .contentList .cl_ul li img{
+            width: 100%;
+        }
+        .contentList .cl_ul .title {
+            text-indent: 1rem;
+            font-weight: normal;
+        }
+        .contentList .cl_ul .author {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .contentList .cl_ul .author p {
+            color: gray;
+        }
+        .contentList .cl_ul .author .author-img {
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .contentList .cl_ul .author .like {
+            padding-left: 7rem;
+            color: gray;
+        }
+        .contentList .cl_ul2{
+            width: 98%;
+            margin-left: 1%;
+            background-color: #f2f2f2;
+            overflow:hidden;
+        }
+        .contentList .cl_ul2 li{
+            width:100%;
+            display: block;
+            height: auto;
+            margin-bottom: 0.3rem;
+            background-color: #fff;
+            border: 1px solid #f2f2f2;
+            line-height: 2.4rem;
+            border-radius: 0.6rem;
+        }
+        .contentList .cl_ul2 img{
+            width: 100%;
+        }
+        .contentList .cl_ul2 .title {
+            text-indent: 1rem;
+            font-weight: normal;
+        }
+        .contentList .cl_ul2 .author {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .contentList .cl_ul2 .author p {
+            color: gray;
+        }
+        .contentList .cl_ul2 .author .author-img {
+            padding: 1rem;
+            text-align: center;
+        }
+        .contentList .cl_ul2 .author .like {
+            padding-left: 24rem;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--头部导航栏-->
+    <div>
+        <van-search
+                v-model="value"
+                show-action
+                left-icon="user-o"
+                placeholder="请输入搜索关键词"
+                @click="onClickButton"
+                fixed="true"
+        >
+            <template #action>
+                <div @click="onClickButton" class="search">搜索</div>
+            </template>
+        </van-search>
+
+
+        <van-tabs v-model:active="first"  :swipeable="true">
+            <van-tab title="关注" name="concern">
+                <div style="background-color: #FAFAFA; height:800px; ">
+                    <img src="images/care.jpg" style="width: 100%">
+                </div>
+            </van-tab>
+
+            <van-tab title="发现" name="find" >
+                <van-tabs v-model:active="active"  :swipeable="true" @click="onShow">
+                    <van-tab title="推荐" name="recommend">
+                        <div class="contentList">
+                            <ul class="cl_ul">
+                                <li v-for="item in recommend[1]" @click="toContentInfo(item.cid)">
+                                    <img :src=`${item.pic}`>
+                                    <div class="title">{{item.ctitle}}</div>
+                                    <div class="author">
+                                        <div class="author-img">
+                                            <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                        </div>
+                                        <p>{{item.nickname}}</p>
+                                        <div class="like"><van-icon name="like-o"/>{{item.clike}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="cl_ul" style="margin-left: 1%">
+                                <li v-for="item in recommend[0]" @click="toContentInfo(item.cid)">
+                                    <img :src=`${item.pic}`>
+                                    <div class="title">{{item.ctitle}}</div>
+                                    <div class="author">
+                                        <div class="author-img">
+                                            <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                        </div>
+                                        <p>{{item.nickname}}</p>
+                                        <div class="like"><van-icon name="like-o" />{{item.clike}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </van-tab>
+
+                    <van-tab v-for="title in titles" :title="title.tname" :key="title.tid" >
+                        <div class="contentList">
+                            <ul class="cl_ul2" >
+                                <li v-for="item in content[title.tid-1]" :key="item.cid" @click="toContentInfo(item.cid)">
+                                    <img :src=`${item.pic}`>
+                                    <div class="title">{{item.ctitle}}</div>
+                                    <div class="author">
+                                        <div class="author-img">
+                                            <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                        </div>
+                                        <p>{{item.nickname}}</p>
+                                        <div class="like"><van-icon name="like-o"/>{{item.clike}}</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </van-tab>
+                </van-tabs>
+            </van-tab>
+
+
+            <van-tab title="视频" name="video">
+                <div class="contentList">
+                    <ul class="cl_ul2" >
+                        <li v-for="item in video" :key="item.vid" @click="toVideoInfo(item.vhttp)">
+                            <img :src=`${item.vpic}`>
+                            <div class="title">{{item.vtitle}}</div>
+                            <div class="author">
+                                <div class="author-img">
+                                    <van-image round width="2.5rem" height="2.5rem" :src=`${item.img}` style="display:block"/>
+                                </div>
+                                <p>{{item.nickname}}</p>
+                                <div class="like"><van-icon name="like-o"/>{{item.vlike}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </van-tab>
+
+        </van-tabs>
+    </div>
+    <!--底部导航栏-->
+    <van-tabbar v-model="bottom" placeholder="true" >
+        <van-tabbar-item icon="home-o" name="home" @click="goHome">主页</van-tabbar-item>
+        <van-tabbar-item icon="comment-o" @click="goMessage">消息</van-tabbar-item>
+        <van-tabber-item >
+            <van-button color="linear-gradient(to right, #ff6034, #ee0a24)" class="van-button-add" @click="goToPut">
+                +
+            </van-button>
+        </van-tabber-item>
+        <van-tabbar-item icon="bag-o" @click="goShopping">商店</van-tabbar-item>
+        <van-tabbar-item icon="contact" @click="goUser">我</van-tabbar-item>
+    </van-tabbar>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    function group(array, subGroupLength) {
+        let index = 0;
+        let newArray = [];
+        while(index < array.length) {
+            newArray.push(array.slice(index, index += subGroupLength));
+        }
+        return newArray;
+    };
+    let app = {
+        data(){
+            return {
+                first: "find",
+                bottom: "home",
+                content:[],
+                arr:[],
+                all:[],
+                titles:[],
+                recommend:[],
+                video:[]
+            }
+        },
+        created(){
+            axios.get("contentServlet",{
+                params:{
+                    op:'findAllType'
+                }
+            }).then(resp=>{
+                this.titles = resp.data;
+            });
+            axios.get("contentServlet",{
+                params:{
+                    op:'findAllContent'
+                }
+            }).then(resp=>{
+                this.all = resp.data;
+                this.content =  Object.values(this.all.reduce((res, item) => {
+                    res[item.tid] ? res[item.tid].push(item) : res[item.tid] = [item];
+                    return res;
+                }, {}));
+                this.recommend = group(resp.data,resp.data.length/2);
+            });
+            axios.get("contentServlet",{
+                params:{
+                    op:'findAllVideo'
+                }
+            }).then(resp=>{
+                this.video = resp.data;
+            });
+        },
+        methods: {
+            toContentInfo(cid){
+                location.href = "content.html#"+ cid;
+            },
+            toVideoInfo(vhttp){
+                window.open(vhttp);
+            },
+            goToPut(){
+                location.href = "put.html";
+            },
+            onClickButton(){
+                location.href = "search.html";
+            },
+            goMessage(){
+                location.href = "message.html";
+            },
+            goShopping(){
+                location.href ="shopping.html";
+            },
+            goUser(){
+                location.href ="user.html";
+            },
+            goHome(){
+                location.href = "index.html";
+            }
+
+        }
+    }
+    let vue = Vue.createApp(app);
+    vue.use(vant);
+    vue.mount('#app');
+</script>
+</body>
+</html>

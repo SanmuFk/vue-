@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>恋爱app</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        .navbar {
+            width: 100%;
+            height: 55px;
+            border-bottom: #f2f2f2 solid 1px;
+            display: flex;
+            z-index:999;
+            position:relative;
+        }
+        .navbar .navbar-left {
+            width: 40%;
+            height: 100%;
+            display: flex;
+        }
+        .navbar .navbar-left .arrow{
+            height: 100%;
+            width: 25px;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar .navbar-left .author{
+            width: 120px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar .navbar-left .author .author-img{
+            width: 40px;
+            height: 40px;
+        }
+        .navbar .navbar-left .author .author-img img{
+           width: 100%;
+            height: 100%;
+            border-radius: 100px;
+        }
+        .navbar .navbar-left .author .author-name{
+            text-indent: 10px;
+            letter-spacing: 3px;
+            width: 80px;
+            color: #000;
+        }
+        .navbar .navbar-right {
+            height: 100%;
+            width: 55%;
+            display: flex;
+        }
+        .navbar .navbar-right .null{
+            width: 45%;
+            height: 100%;
+            background: white;
+        }
+        .navbar .navbar-right .button{
+            width: 30%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .navbar .navbar-right .share{
+            width: 20%;
+            padding-left: 5%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 50rem;
+        }
+        .img img{
+            width: 100%;
+            height: 100%;
+        }
+        .title {
+            padding: 15px;
+            text-indent: 18px;
+            font-weight: 15px;
+            letter-spacing: 3px;
+            color: #000;
+            font-size: 20px;
+        }
+        .content {
+            padding-left: 15px;
+            text-indent: 20px;
+            letter-spacing: 1px;
+            font-weight: 10px;
+            font-size: 18px;
+        }
+        .like {
+            padding: 15px;
+            color: #000;
+            display: flex;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+   <div id="app">
+       <div class="navbar">
+           <div class="navbar-left">
+               <div class="arrow"><van-icon name="arrow-left" size="25px" @click="onClickLeft" /></div>
+               <div class="author">
+                   <div class="author-img">
+                       <img :src=`${thing.img}`>
+                   </div>
+                   <div class="author-name">{{thing.nickname}}</div>
+               </div>
+           </div>
+           <div class="navbar-right">
+               <div class="null"></div>
+                <div class="button">
+                    <van-button round type="primary" size="small" style="border: 1px solid orangered;background-color: white;color: orangered;width: 100%">关注</van-button>
+                </div>
+               <div class="share">
+                   <van-icon name="share-o"  size="20px"/>
+               </div>
+           </div>
+
+       </div>
+
+       <div class="img">
+           <img :src= `${image}` />
+       </div>
+       <div class="title">
+           {{thing.ctitle}}
+       </div>
+       <div class="content">
+           {{thing.content}}
+       </div>
+       <div class="like"><van-icon name="like-o" style="display: flex;"/><div style="display: flex;margin-left: 5px; ">{{thing.clike}}</div></div>
+
+       <van-tabbar v-model="active" style="border-top: 1px solid #f2f2f2">
+           <van-cell-group inset>
+               <van-field
+                       v-model="message"
+                       rows="2"
+                       autosize
+                       label="留言"
+                       type="textarea"
+                       maxlength="50"
+                       placeholder="请输入留言"
+                       show-word-limit
+               />
+           </van-cell-group>
+       </van-tabbar>
+   </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+   <script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+   <script src="js/axios.min.js"></script>
+
+   <script>
+       let app = {
+           data() {
+               return{
+                   cid: 0,
+                   thing:{},
+                   image: ""
+               }
+           },
+           created(){
+               this.cid = location.hash.replace("#","");
+               axios.get("contentServlet",{
+                   params:{
+                       op:'findByCid',
+                       cid: this.cid
+                   }
+               }).then(resp=>{
+                   if( resp.data == -1){
+                       location.href = "index.html";
+                       return;
+                   }
+                   this.thing = resp.data[0];
+                   this.image = resp.data[0].pic;
+                   console.log(this.thing);
+               })
+           },
+           methods:{
+               onClickLeft(){
+                   history.back();
+               }
+           }
+       }
+       let vue = Vue.createApp(app);
+       vue.use(vant);
+       vue.mount('#app');
+   </script>
+</body>
+</html>

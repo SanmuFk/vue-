@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!---->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>Loving</title>
+    <!--使界面能够适应手机屏幕的大小-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        html,body{
+            height: 100%;
+        }
+
+        #app{
+            min-height: 100%;
+        }
+        #app .van-cell{
+            height: 5rem;
+        }
+
+
+    </style>
+
+</head>
+<!--style="style="background-color:rgba(255,255,255,0)""-->
+<body >
+    <div id="app">
+
+        <!--顶部标签栏-->
+        <van-nav-bar class="head"
+                     title="标题"
+                    right-text="保存"
+                    left-arrow
+                    @click-left="backToInfo"
+                    @click-right="saveChange">
+        </van-nav-bar>
+
+        <van-cell-group inset>
+            <van-field v-model="username" label="用户名" placeholder="请输入用户名" ></van-field>
+
+            <!--账号不可修改-->
+            <van-field label="账号" model-value="id" readonly ></van-field>
+
+
+        <van-field name="radio" label="性别">
+            <template #input>
+                <van-radio-group v-model="sex" direction="horizontal">
+                    <van-radio name="man" @click="sex='man'">男</van-radio>
+                    <van-radio name="woman" @click="sex='woman'">女</van-radio>
+                </van-radio-group>
+            </template>
+        </van-field>
+
+        <van-field
+                v-model="fieldValue"
+                is-link
+                readonly
+                name="area"
+                label="地区选择"
+                placeholder="点击选择省市区"
+                @click="showArea = true"
+        ></van-field>
+        <van-popup v-model:show="showArea" round position="bottom">
+            <van-cascader
+                    v-model="cascaderValue"
+                    title="请选择所在地区"
+                    :options="optionsAddress"
+                    @close="showArea = false"
+                    @finish="onFinish"
+            ></van-cascader>
+        </van-popup>
+        </van-cell>
+
+        <van-cell
+                title="生日"
+                :value="birthdaydate"
+                is-link
+                @click="showCalendar"
+        ></van-cell>
+            <van-calendar v-model:show="showBirthday" @confirm="birthdayConfirm" ></van-calendar>
+
+
+            <van-field v-model="introduce" label="自我介绍" placeholder="请输入自我介绍" ></van-field>
+            <van-field
+                    v-model="lover"
+                    is-link
+                    readonly
+                    name="picker"
+                    label="我喜欢的人"
+                    placeholder="点击选择心上人的类型"
+                    @click="showLover = true"
+            ></van-field>
+
+            <van-popup v-model:show="showLover" position="bottom">
+                <van-picker
+                        :columns="lovercolumns"
+                        @confirm="showLoverLevel"
+                        @cancel="showLover = false"
+                ></van-picker>
+            </van-popup>
+        </van-cell-group>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+
+    //基本模板
+    let app = {
+        data(){
+            return {
+                lovercolumns : [
+                    {
+                        values: ['元气','阳光','乐观','勇敢'],
+                        defaultIndex: 3,
+                    },
+                    // 第一列
+                    {
+                        values: ['18-22岁', '22-26岁', '26-31岁','32-36岁'],
+                        defaultIndex: 2,
+                    },
+                    // 第二列
+                    {
+                        values: ['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','人马座','摩羯座','宝瓶座','双鱼座'],
+                        defaultIndex: 1,
+                    },
+                ],
+                optionsAddress : [
+                    {
+                        text: '浙江省',
+                        value: '330000',
+                        children: [{ text: '杭州市', value: '330100' }],
+                    },
+                    {
+                        text: '江苏省',
+                        value: '320000',
+                        children: [{ text: '南京市', value: '320100' }],
+                    },
+                ],
+                showArea: false,
+                fieldValue:'',
+                sex: '',
+                cascaderValue:'',
+                showBirthday: false,
+                birthdaydate: "",
+                showLover: false,
+                lover: ''
+            }
+        },
+        methods:{
+            backToInfo(){
+                history.back();
+            },
+            save(){
+                <!--此处用来写更新数据库的代码-->
+            },
+            showCalendar(){
+                this.showBirthday=true;
+            },
+            birthdayConfirm(value) {
+                <!--如何获得选择后的日期值，或者说怎么设置一个常量-->
+                let xx = `${value.getFullYear()}/${value.getMonth() + 1}/${value.getDate()}`;
+                this.showBirthday=false;
+                this.birthdaydate = xx;
+            },
+            areaConfirm(){
+                this.showArea=true;
+            },
+            onFinish({selectedOptions}){
+                this.fieldValue = selectedOptions.map((optionsAddress) => optionsAddress.text).join('/');
+            },
+            showLoverLevel(value){
+                this.lover = value;
+                this.showLover = false;
+            }
+        }
+
+    }
+    //创建vue实例
+    let vue=Vue.createApp(app);
+    //绑定vant-ui
+    vue.use(vant);
+    //挂载到节点上面
+    vue.mount("#app");
+  </script>
+
+</body>
+</html>

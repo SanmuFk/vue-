@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <title>恋爱app</title>
+    <!->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <style>
+        html{
+            font-size: 10px;
+        }
+        body{
+            font-size: 1.4rem;
+        }
+        html,body{
+            height: 100%;
+        }
+
+        #app{
+            min-height: 100%;
+        }
+
+        .friend{
+            padding: 0.8rem 4%;
+            height: 60px;
+            background-color: white;
+        }
+        .friend .van-col{
+            line-height: 3rem;
+            font-size: 1.5rem;
+        }
+        .friend .van-col img{
+            width:55px;
+            height: 55px;
+
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <van-nav-bar
+            title="收到的赞和收藏"
+            left-arrow
+            @click-left="onClickLeft"
+    ></van-nav-bar>
+
+    <div>
+        <van-row class="friend">
+            <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+                <img :src="pic" alt="" sizes="10px" style="border-radius: 50%;display: block;">
+            </van-col>
+            <van-col span="10" >
+                <van-row >王乐
+                    <van-col span="12" style="padding-left: 0.5rem">
+                        <van-tag round plain type="primary" size="" color="silver" style="font-size: 5px;">你的好友</van-tag>
+                    </van-col>
+                </van-row>
+                <van-row style="color: silver;font-size: 15px" >赞了你的笔记</van-row>
+            </van-col>
+            <van-col span="12.8" style="padding-left: 8rem;">
+                <van-image  src="images/brand1.jpg" />
+            </van-col>
+        </van-row>
+
+        <van-row class="friend">
+            <van-col span="5.8" style="padding-left: 0.5rem;padding-right: 0.5rem">
+                <img :src="pic" alt="" sizes="10px" style="border-radius: 50%;display: block;">
+            </van-col>
+            <van-col span="10" >
+                <van-row >不羁
+                    <van-col span="12" style="padding-left: 0.5rem">
+                        <van-tag round plain type="primary" size="" color="silver" style="font-size: 5px;">你的好友</van-tag>
+                    </van-col>
+                </van-row>
+                <van-row style="color: silver;font-size: 15px">赞了你的笔记</van-row>
+            </van-col>
+            <van-col span="12.8" style="padding-left: 8rem;">
+                <van-image  src="images/brand2.jpg"/>
+            </van-col>
+        </van-row>
+    </div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+
+<script>
+    //基本模板
+    let app = {
+        data(){
+            return {
+                pic:'images/cover.jpg',
+
+            }
+        },methods:{
+        onClickLeft(){
+            location.href="message.html";
+        }
+        }
+    }
+    //创建vue实例
+    let vue=Vue.createApp(app);
+    //绑定vant-ui
+    vue.use(vant);
+    //挂载到节点上面
+    vue.mount("#app");
+</script>
+</body>
+</html>

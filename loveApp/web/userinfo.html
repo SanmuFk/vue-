@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑资料</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        html {
+            font-size: 10px;
+        }
+
+        body {
+            font-size: 1.4rem;
+        }
+
+        html, body {
+            height: 100%;
+        }
+        #userinfo {
+            min-height: 100%;
+            background-color: #ffffff;
+        }
+        #userinfo .head{
+            height: 5rem;
+            width: 100%;
+        }
+        #userinfo .van-cell {
+
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!--返回主页-->
+        <van-nav-bar class="head"
+                     title="我的资料"
+                     left-text="返回"
+                     left-arrow
+                     @click-left="onClickLeft">
+        </van-nav-bar>
+
+        <!--单元格的默认值从mysql中读取-->
+        <van-cell title="头像" :value=`image/${pic}` size="large" ></van-cell>
+        <van-cell title="名字" :value="utname" size="large" ></van-cell>
+        <van-cell title="账号" :value="num" size="large" ></van-cell>
+        <van-cell title="性别" :value="sex" size="large"></van-cell>
+        <van-cell title="住址" :value="address" size="large" ></van-cell>
+        <van-cell title="自我介绍" :value="intro" size="large" ></van-cell>
+        <van-cell title="生日" :value="birthday" size="large" ></van-cell>
+        <van-cell title="我喜欢的人" :value="love" size="large"></van-cell>
+
+        <div style="margin-left: 10rem;margin-right: 10rem;margin-top: 2rem">
+            <van-button round block type="primary" url="changeInfo.html">修改资料</van-button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+
+        let app = {
+            methods:{
+                onClickLeft(){
+                    history.back();
+                },
+            },
+            data(){
+                return{
+                    pic: '',
+                    utname: '',
+                    num: '',
+                    sex:'',
+                    address: '',
+                    intro: '',
+                    birthday:'',
+                    love: ''
+                }
+            },
+            created(){
+                //发送ajax请求
+                axios.get("userinfoservlet" , {
+                    params:{
+                        op:'findUserInfo'
+                    }
+                }).then(resp=>{
+                    this.pic = resp.data[0].pic;
+                    this.utname = resp.data[0].nickname;
+                    this.num = resp.data[0].username;
+                    this.sex = resp.data[0].sex;
+                    this.address = resp.data[0].address;
+                    this.intro = resp.data[0].intro;
+                    this.birthday = resp.data[0].birthday;
+                    this.love = resp.data[0].love;
+                    console.log(resp.data[0]);
+
+                });
+            },
+            methods: {
+                onClickLeft(){
+                    history.back();
+                }
+            }
+        }
+
+        let vue = Vue.createApp(app);
+        vue.use(vant);
+        vue.mount("#app");
+    </script>
+</body>
+</html>

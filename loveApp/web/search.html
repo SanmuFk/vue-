@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <title>搜索</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@3/lib/index.css"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <style>
+        .van-col{
+            display: flex;
+            align-items: center;
+        }
+        .van-col .right{
+            width: 100%;
+            float: right;
+        }
+        .van-icon{
+            align-items: center;
+        }
+        .van-tag{
+            margin:1rem;
+            height:1.5rem;
+            text-align: center;
+        }
+        .van-search{
+            width:18rem;
+        }
+        .van-nav-bar{
+            width:21rem;
+        }
+        .van-nav-bar__text {
+            color: orangered;
+        }
+    </style>
+    <style lang="less" scoped>
+    </style>
+</head>
+<body>
+<div id="app" display="flex">
+    <van-row>
+        <van-col >
+            <van-icon
+                    name="arrow-left"
+                    @click="goBack"
+            />
+        </van-col class="right">
+        <van-col >
+            <van-search
+                    v-model="search_val"
+                    show-action
+                    shape="round"
+                    placeholder="请输入搜索关键词"
+                    @search="get_search"
+            >
+                <template #action margin="2rem">
+                    <div @click="get_search" float="right" >搜索</div>
+                </template>
+        </van-col>
+    </van-row>
+    </van-search>
+
+    <van-nav-bar
+            style="color: orangered"
+            left-text="历史记录"
+            right-text="清空记录"
+            @click-left="onClickLeft"
+            @click-right="empty"
+    ></van-nav-bar>
+
+    <van-row gutter="50">
+        <van-tag round type="primary" v-for="(item,index) in historyList" :key="index" @click="goSearchDetail(item)">{{item}}</van-tag>
+    </van-row>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@3/lib/vant.min.js"></script>
+<script>
+    let app={
+        data(){
+            return{
+                search_val: '', //搜索的内容
+                historyList: [] //历史搜索记录，存本地
+            }
+        },
+        mounted() {
+            //如果本地存储的数据historyList有值，直接赋值给data中的historyList
+            if (JSON.parse(localStorage.getItem("historyList"))) {
+                this.historyList = JSON.parse(localStorage.getItem("historyList"));
+            }
+        },
+        methods: {
+            // 搜索
+            get_search(){
+                if(this.search_val == ''){
+                    this.$toast('请输入搜索内容');
+                    return false;
+                }else{
+                    // 没有搜索记录，把搜索值push进数组首位，存入本地
+                    if (!this.historyList.includes(this.search_val)) {
+                        this.historyList.unshift(this.search_val);
+                        localStorage.setItem("historyList", JSON.stringify(this.historyList));
+                    }else{
+                        //有搜索记录，删除之前的旧记录，将新搜索值重新push到数组首位
+                        let i =this.historyList.indexOf(this.search_val);
+                        this.historyList.splice(i,1)
+                        this.historyList.unshift(this.search_val);
+                        localStorage.setItem("historyList", JSON.stringify(this.historyList));
+                    }
+                    //跳转到搜索结果页
+                    this.$router.push({
+                        path: "/list",
+                        query: {
+                            search_val: this.search_val,
+                        },
+                    });
+                }
+            },
+            //点击历史搜索，跳转搜索结果页
+            goSearchDetail(title){
+                this.$router.push({
+                    path: "/list",
+                    query: {
+                        search_val: title,
+                    },
+                });
+            },
+
+            //清空历史搜索记录
+            empty(){
+                this.$toast.success('清空历史搜索成功');
+                localStorage.removeItem('historyList');
+                this.historyList = [];
+            },
+            goBack(){
+                location.href = "index.html";
+            }
+        },
+
+    }
+
+
+
+    let vue =Vue.createApp(app);
+
+    vue.use(vant);
+
+    vue.mount("#app");
+</script>
+</body>
+</html>
