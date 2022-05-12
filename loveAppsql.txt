@@ -1,0 +1,209 @@
+/*
+SQLyog Professional v12.09 (64 bit)
+MySQL - 8.0.23 : Database - loveapp
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`loveapp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `loveapp`;
+
+/*Table structure for table `attribute` */
+
+DROP TABLE IF EXISTS `attribute`;
+
+CREATE TABLE `attribute` (
+  `aid` int NOT NULL AUTO_INCREMENT,
+  `gid` int DEFAULT NULL,
+  `aname` varchar(100) DEFAULT NULL,
+  `val` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`aid`),
+  KEY `FK_attr_gid` (`gid`),
+  CONSTRAINT `FK_attr_gid` FOREIGN KEY (`gid`) REFERENCES `goods` (`gid`)
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `attribute` */
+
+insert  into `attribute`(`aid`,`gid`,`aname`,`val`) values (46,1,'材质','面料 96% 涤纶 4%氨纶填充物：100%聚酯纤维'),(47,1,'尺寸','直径40cm 直径55cm'),(48,1,'执行标准','GBT 22843-2009'),(49,1,'产地','中国浙江'),(50,1,'颜色','天青色 松叶绿 珊瑚红 姜黄色 香芋粉 卡其色 深咖色 海军蓝'),(51,2,'规格','3545cm'),(52,2,'填充物','聚苯乙烯泡沫粒子'),(53,2,'填充物重量','260g'),(54,2,'面料','100%棉'),(55,2,'执行标准','GBT 22843-2009'),(56,2,'安全技术类别','GB 8401-2010 B类'),(57,1,'材质','面料 96% 涤纶 4%氨纶填充物：100%聚酯纤维'),(58,1,'尺寸','直径40cm 直径55cm'),(59,1,'执行标准','GBT 22843-2009'),(60,1,'产地','中国浙江'),(61,1,'颜色','天青色 松叶绿 珊瑚红 姜黄色 香芋粉 卡其色 深咖色 海军蓝'),(62,2,'规格','3545cm'),(63,2,'填充物','聚苯乙烯泡沫粒子'),(64,2,'填充物重量','260g'),(65,2,'面料','100%棉'),(66,2,'执行标准','GBT 22843-2009'),(67,2,'安全技术类别','GB 8401-2010 B类');
+
+/*Table structure for table `cartinfo` */
+
+DROP TABLE IF EXISTS `cartinfo`;
+
+CREATE TABLE `cartinfo` (
+  `cid` int NOT NULL AUTO_INCREMENT,
+  `id` int DEFAULT NULL,
+  `gid` int DEFAULT NULL,
+  PRIMARY KEY (`cid`),
+  KEY `FK_cartinfo_gid` (`gid`),
+  KEY `FK_cartinfo_id` (`id`),
+  CONSTRAINT `FK_cartinfo_gid` FOREIGN KEY (`gid`) REFERENCES `goods` (`gid`),
+  CONSTRAINT `FK_cartinfo_id` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `cartinfo` */
+
+/*Table structure for table `contents` */
+
+DROP TABLE IF EXISTS `contents`;
+
+CREATE TABLE `contents` (
+  `cid` int NOT NULL AUTO_INCREMENT,
+  `ctitle` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `pic` varchar(800) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `content` varchar(100) DEFAULT NULL,
+  `id` int DEFAULT NULL,
+  `clike` varchar(100) DEFAULT NULL,
+  `tid` int DEFAULT NULL,
+  PRIMARY KEY (`cid`),
+  KEY `tid` (`tid`),
+  KEY `id` (`id`),
+  CONSTRAINT `id` FOREIGN KEY (`id`) REFERENCES `user` (`id`),
+  CONSTRAINT `tid` FOREIGN KEY (`tid`) REFERENCES `type` (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `contents` */
+
+insert  into `contents`(`cid`,`ctitle`,`pic`,`content`,`id`,`clike`,`tid`) values (1,'春季男生穿搭','images/brand1.jpg','又又又到了换季的时节',2,'12',1),(2,'好看的情头','images/brand2.jpg','情侣不可错过的好看头像',1,'9',2),(3,'恋爱须知！','images/brand3.jpg','情侣之间最忌讳的事情',1,'100',3),(4,'请你参与我的春天','images/brand4.jpg','哈哈哈哈哈哈哈',1,'140',3),(5,'保存可爱，积极向上','images/brand5.jpg','哒哒哒',1,'1333',4),(6,'女生想要的36件礼物（百元内）','images/brand6.jpg','节日快到啦，给你心爱的人送礼物吧',1,'2531',5),(7,'长沙旅游攻略','images/brand7.jpg','长沙最适合打卡的城市，美食风景 ',2,'7000',6),(8,'咱就是说：诶，就是玩儿~','images/brand8.jpg','这是个表情包',2,'1.1w',7),(13,'123','images/brand5.jpg','123',1,NULL,2);
+
+/*Table structure for table `goods` */
+
+DROP TABLE IF EXISTS `goods`;
+
+CREATE TABLE `goods` (
+  `gid` int NOT NULL AUTO_INCREMENT,
+  `gname` varchar(50) DEFAULT NULL,
+  `price` double(8,2) DEFAULT NULL,
+  `pic` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `brief` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `descr` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `unit` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `gallery` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `number` int DEFAULT NULL,
+  `tid` int DEFAULT NULL,
+  PRIMARY KEY (`gid`),
+  KEY `FK_goods_tid` (`tid`),
+  CONSTRAINT `FK_goods_tid` FOREIGN KEY (`tid`) REFERENCES `type` (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `goods` */
+
+insert  into `goods`(`gid`,`gname`,`price`,`pic`,`brief`,`descr`,`unit`,`gallery`,`number`,`tid`) values (1,'日式蓬软太鼓抱枕',29.00,'goods1.png','萌趣太鼓造型 软糯轻柔回弹','style=ppimg src=httpyanxuan.nosdn.127.netfab6ee083f738fe81e836f5b46345b8c.jpg _src=httpyanxuan.nosdn.127.netfab6ee083f738fe81e836f5b46345b8c.jpg style=ppbrp','件','goods1_1.jpg,goods1_2.jpg,goods1_3.jpg,goods1_4.jpg',100,1),(2,'日式多功能手卷午睡枕坐垫',79.00,'goods2.png','全棉针织条纹，透气按摩粒子','style=ppimg src=httpyanxuan.nosdn.127.net959c4385428233e4ec256a6646ced133.jpg _src=httpyanxuan.nosdn.127.net959c4385428233e4ec256a6646ced133.jpg style=ppbrp','件','goods2_1.jpg,goods2_2.jpg,goods2_3.jpg,goods2_4.jpg',100,1),(3,'日式蓬软太鼓抱枕',29.00,'goods1.png','萌趣太鼓造型 软糯轻柔回弹','style=ppimg src=httpyanxuan.nosdn.127.netfab6ee083f738fe81e836f5b46345b8c.jpg _src=httpyanxuan.nosdn.127.netfab6ee083f738fe81e836f5b46345b8c.jpg style=ppbrp','件','goods1_1.jpg,goods1_2.jpg,goods1_3.jpg,goods1_4.jpg',100,1),(4,'日式多功能手卷午睡枕坐垫',79.00,'goods2.png','全棉针织条纹，透气按摩粒子','style=ppimg src=httpyanxuan.nosdn.127.net959c4385428233e4ec256a6646ced133.jpg _src=httpyanxuan.nosdn.127.net959c4385428233e4ec256a6646ced133.jpg style=ppbrp','件','goods2_1.jpg,goods2_2.jpg,goods2_3.jpg,goods2_4.jpg',100,1);
+
+/*Table structure for table `orderinfo` */
+
+DROP TABLE IF EXISTS `orderinfo`;
+
+CREATE TABLE `orderinfo` (
+  `oid` int NOT NULL AUTO_INCREMENT,
+  `id` int DEFAULT NULL,
+  `gids` varchar(200) DEFAULT NULL,
+  `money` double(9,2) DEFAULT NULL,
+  `odate` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `orderinfo` */
+
+/*Table structure for table `type` */
+
+DROP TABLE IF EXISTS `type`;
+
+CREATE TABLE `type` (
+  `tid` int NOT NULL AUTO_INCREMENT,
+  `tname` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `type` */
+
+insert  into `type`(`tid`,`tname`) values (1,'穿搭'),(2,'头像背景'),(3,'告白方案'),(4,'聊天技巧'),(5,'节日礼物'),(6,'旅游风景'),(7,'搞笑');
+
+/*Table structure for table `type1` */
+
+DROP TABLE IF EXISTS `type1`;
+
+CREATE TABLE `type1` (
+  `tid` int NOT NULL AUTO_INCREMENT,
+  `tname` varchar(20) DEFAULT NULL,
+  `STATUS` int DEFAULT NULL,
+  PRIMARY KEY (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `type1` */
+
+insert  into `type1`(`tid`,`tname`,`STATUS`) values (1,'志趣',1),(2,'居家',1),(3,'餐厨',1),(4,'配件',1),(5,'饮食',1),(6,'志趣',1),(7,'居家',1),(8,'餐厨',1),(9,'配件',1),(10,'饮食',1),(11,'志趣',1),(12,'居家',1),(13,'餐厨',1),(14,'配件',1),(15,'饮食',1),(16,'志趣',1),(17,'居家',1),(18,'餐厨',1),(19,'配件',1),(20,'饮食',1),(21,'志趣',1);
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(30) DEFAULT NULL,
+  `num` int DEFAULT NULL,
+  `username` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `pwd` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `gender` int DEFAULT '1',
+  `img` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `user` */
+
+insert  into `user`(`id`,`nickname`,`num`,`username`,`pwd`,`gender`,`img`) values (1,'三木',NULL,'123','123',1,'https://img.yzcdn.cn/vant/cat.jpeg'),(2,'陈刀仔',NULL,'1234','1234',1,'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmp1.iqiyipic.com%2Fimage%2F20180428%2F61%2F48%2Fppu_243627470102_pp_601_m1_300_300.jpg&refer=http%3A%2F%2Fmp1.iqiyipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1649860840&t=aa91414f8eb2199e79935a40f3a4b323');
+
+/*Table structure for table `userinto` */
+
+DROP TABLE IF EXISTS `userinto`;
+
+CREATE TABLE `userinto` (
+  `uid` int NOT NULL AUTO_INCREMENT,
+  `address` varchar(200) DEFAULT NULL,
+  `sex` varchar(5) DEFAULT NULL,
+  `intro` varchar(3000) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `love` varchar(500) DEFAULT NULL,
+  `id` int DEFAULT NULL,
+  PRIMARY KEY (`uid`),
+  KEY `id1` (`id`),
+  CONSTRAINT `id1` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `userinto` */
+
+insert  into `userinto`(`uid`,`address`,`sex`,`intro`,`birthday`,`love`,`id`) values (1,'翻斗大街翻斗花园','男','哈哈哈','2001-06-06','喜欢小美',1);
+
+/*Table structure for table `video` */
+
+DROP TABLE IF EXISTS `video`;
+
+CREATE TABLE `video` (
+  `vid` int NOT NULL AUTO_INCREMENT,
+  `vtitle` varchar(50) NOT NULL,
+  `vcontent` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `id` int DEFAULT NULL,
+  `vlike` varchar(50) DEFAULT NULL,
+  `vpic` varchar(500) DEFAULT NULL,
+  `vhttp` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`vid`),
+  KEY `uid` (`id`),
+  CONSTRAINT `uid` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `video` */
+
+insert  into `video`(`vid`,`vtitle`,`vcontent`,`id`,`vlike`,`vpic`,`vhttp`) values (1,'天线宝宝','《天线宝宝》（英语：Teletubbies），香港译《天线得得B》，是英国广播公司（BBC）与Rag Doll公司制作的幼儿节目，发行于1997年到2001年，主要观众对象是一到四岁的儿童。但后期由于网络上华人社群的恶搞文化，令《天线宝宝》火速窜红，成为网友喜爱的恶搞对象。',1,'1.1w','https://img1.baidu.com/it/u=2047051497,3721899636&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500','https://www.iqiyi.com/v_19rrllum88.html?vfm=2008_aldbd'),(2,'花园宝宝','花园宝宝(英文：In the night garden 直译：在夜晚的花园里)是BBC专为1至4岁儿童而设的一个儿童节目系列。采用高清电影胶片摄制，该节目由曾经制作天线宝宝的布娃娃公司制作。与一般低幼儿童节目不同，《花园宝宝》的特色是完全看不出要“教”幼儿什么东西，而是给宝宝一种睡如冰海的奇妙感觉，给1到4岁的幼儿一段好奇探索的欢乐时光。',1,'2.9w','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202004%2F05%2F20200405105342_ioymr.thumb.400_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1649904487&t=4da57227f6b2e97cb749a68f9d5dca05','https://v.qq.com/x/cover/v80ysxrm0koczkd/c0014vze6a2.html?ptag=10524');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
