@@ -1,6 +1,7 @@
 # vue-
 vue仿小红书项目前后端源码
 
+直接使用IDEA可以运行代码文件
 前端代码在web文件夹中
 后端代码在src文件夹中
 数据库修改在src->com->fk->servlet->DBHelper.java 代码中，需要修改成自己的数据库连接（我使用的是Mysql8）
